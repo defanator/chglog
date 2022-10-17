@@ -18,17 +18,18 @@ const (
 `
 	debTpl = `{{- $name := .Name}}
 {{- range .Entries }}
-{{ $name }} ({{ .Semver }}){{if .Deb}} {{default "" (.Deb.Distributions | join " ")}}; urgency={{default "low" .Deb.Urgency}}{{end}}
-  {{- range .Changes }}{{$note := splitList "\n" .Note}}
+{{- $name }} ({{ .Semver }}){{if .Deb}} {{default "" (.Deb.Distributions | join " ")}}; urgency={{default "low" .Deb.Urgency}}{{end}}
+{{ range .Changes }}{{$note := splitList "\n" .Note}}
   * {{ first $note }}
    {{- range $i,$n := (rest $note) }}
    {{- if ne (trim $n) ""}}
-   - {{$n}}{{end}}
-{{- end}}{{end}}
+    {{$n}}{{end}}
+{{- end}}{{ end }}
 
  -- {{ .Packager }}  {{ date_in_zone "Mon, 02 Jan 2006 03:04:05 -0700" .Date "UTC" }}
-{{ end }}
-`
+
+{{ end }}`
+
 	releaseTpl = `
 Changelog
 =========
